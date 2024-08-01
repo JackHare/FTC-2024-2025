@@ -1479,3 +1479,21 @@ Changes include:
  * The API for the Legacy Module and Core Device Interface Module have been updated.
    - Support for encoders with the Legacy Module is now working.
  * The hardware loop has been updated for better performance.
+
+
+
+        if (currentlyDancing) {
+            if (temp == 0)
+            currentlyDancing = dances.spinning(hardware, timeWhenStartingDancing, runTime.time(), 5);
+            if (temp == 1)
+                currentlyDancing = dances.driving(hardware, .5,timeWhenStartingDancing, runTime.time(), .5);
+            else {
+                currentlyDancing = dances.driving(hardware, -.5,timeWhenStartingDancing, runTime.time(), .5);
+                temp = 0;
+            }
+        } else
+       {
+           temp += 1;
+           currentlyDancing = true;
+           timeWhenStartingDancing = runTime.time();
+       }

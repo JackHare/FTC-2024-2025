@@ -10,6 +10,8 @@ import org.firstinspires.ftc.teamcode.haaslibs.AprilTag;
 import org.firstinspires.ftc.teamcode.haaslibs.Hardware;
 import org.firstinspires.ftc.teamcode.haaslibs.Tensorflow;
 
+import java.util.ArrayList;
+
 @TeleOp
 public class AprilTagGame extends OpMode {
 
@@ -17,6 +19,7 @@ public class AprilTagGame extends OpMode {
 
     Tensorflow tensorflow = new Tensorflow();
     AprilTag aprilTag = new AprilTag();
+    AprilTag lastAprilTag = new AprilTag();
 
     ElapsedTime runTime = new ElapsedTime();
 
@@ -25,15 +28,17 @@ public class AprilTagGame extends OpMode {
     boolean currentlyDancing = false;
     double timeWhenStartingDancing = 0;
 
-    int temp = 0;
+    boolean pollingForAprilTags = true;
+    int counter = 0;
+
+    ArrayList <AprilTag> aprilTagIds = new ArrayList<>();
+
     @Override
     public void init()
     {
         hardware = new Hardware(hardwareMap);
         //init machine learning stuff
         tensorflow.init(hardwareMap);
-        currentlyDancing = true;
-        timeWhenStartingDancing = runTime.time();
         telemetry.speak("Hello, hello hello hello");
     }
 
@@ -47,36 +52,47 @@ public class AprilTagGame extends OpMode {
     public void loop() {
         //Poll for april tags
         aprilTag = tensorflow.pollAprilTag();
+        if (aprilTag.number != 0 && pollingForAprilTags && aprilTag.number != lastAprilTag.number)aprilTagIds.add(aprilTag);
+        lastAprilTag = aprilTag;
         telemetry.addData("Number", aprilTag.number);
         telemetry.addData("Name", aprilTag.name);
-
-        if (currentlyDancing) {
-            if (temp == 0)
-            currentlyDancing = dances.spinning(hardware, timeWhenStartingDancing, runTime.time(), 5);
-            if (temp == 1)
-                currentlyDancing = dances.driving(hardware, .5,timeWhenStartingDancing, runTime.time(), .5);
-            else {
-                currentlyDancing = dances.driving(hardware, -.5,timeWhenStartingDancing, runTime.time(), .5);
-                temp = 0;
-            }
-        } else
-       {
-           temp += 1;
-           currentlyDancing = true;
-           timeWhenStartingDancing = runTime.time();
-       }
-
         telemetry.addData("time", (Math.sin(runTime.time())));
 
+        for(int i = 0; i < aprilTagIds.size();i++)telemetry.addData("id "+ i, aprilTagIds.get(i).number);
+
+
+        if (gamepad1.a)
+        {
+            timeWhenStartingDancing = runTime.time();
+            pollingForAprilTags = false;
+        }
+        if (!pollingForAprilTags) {
+            if(aprilTagIds.get(counter).number == 583)
+            {
+                currentlyDancing = dances.spinning(hardware, timeWhenStartingDancing, runTime.time(), 3);
+            }
+            if(aprilTagIds.get(counter).number == 584)
+            {
+                currentlyDancing = dances.driving(hardware,.5, timeWhenStartingDancing, runTime.time(), 1);
+            }
+        }
+
+        if(!currentlyDancing && !pollingForAprilTags)
+        {
+            currentlyDancing = true;
+            counter++;
+            if(counter == aprilTagIds.size())requestOpModeStop();
+        }
+
         if (Math.sin(runTime.time())*10 >= .5) {
-            hardware.arm.setTargetPosition(-1000);
-            hardware.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            hardware.arm.setPower(1);
+     //       hardware.arm.setTargetPosition(-1000);
+       //     hardware.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+         //   hardware.arm.setPower(1);
         }else
         {
-            hardware.arm.setTargetPosition(-200);
-            hardware.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            hardware.arm.setPower(1);
+            //hardware.arm.setTargetPosition(-200);
+           // hardware.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+           // hardware.arm.setPower(1);
         }
     }
 
