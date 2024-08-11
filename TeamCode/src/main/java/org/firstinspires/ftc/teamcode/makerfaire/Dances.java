@@ -13,26 +13,26 @@ public class Dances {
     public boolean spinning(Hardware hardware, double startingTime, double timeNow, double seconds)
     {
         if (timeNow - seconds >= startingTime) {
-            hardware.reset();
+          //  hardware.reset();
             return false;
         }
-        hardware.frontLeft.setPower(.75);;
-        hardware.backLeft.setPower(.75);;
-        hardware.backRight.setPower(-.75);
-        hardware.frontRight.setPower(-75);
+        //hardware.frontLeft.setPower(.75);;
+        //hardware.backLeft.setPower(.75);;
+        //hardware.backRight.setPower(-.75);
+        //hardware.frontRight.setPower(-75);
         return true;
     }
 
     public boolean driving(Hardware hardware, double power, double startingTime, double timeNow, double seconds)
     {
         if (timeNow - seconds >= startingTime) {
-            hardware.reset();
+          //  hardware.reset();
             return false;
         }
-        hardware.frontLeft.setPower(power);;
-        hardware.backLeft.setPower(power);;
-        hardware.backRight.setPower(power);
-        hardware.frontRight.setPower(power);
+        //hardware.frontLeft.setPower(power);;
+        //hardware.backLeft.setPower(power);;
+        //hardware.backRight.setPower(power);
+        //hardware.frontRight.setPower(power);
         return true;
     }
 

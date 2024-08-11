@@ -2,8 +2,11 @@ package org.firstinspires.ftc.teamcode.makerfaire;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.haaslibs.AprilTag;
+import org.firstinspires.ftc.teamcode.haaslibs.Hardware;
+import org.firstinspires.ftc.teamcode.haaslibs.Movement;
 import org.firstinspires.ftc.teamcode.haaslibs.Tensorflow;
 
 import java.util.Set;
@@ -21,10 +24,14 @@ public class Polling extends LinearOpMode {
 
     Set<Integer> AprilTagIds = new HashSet<>();
 
+    Hardware hardware;
+
     @Override
     public void runOpMode() {
         //Init
         tensorflow.init(hardwareMap);
+
+        hardware = new Hardware(hardwareMap);
 
         //Start
         waitForStart();
@@ -47,6 +54,9 @@ public class Polling extends LinearOpMode {
             {
                 telemetry.addData("number", aprilTags.get(i).number);
             }
+
+            Movement movement = new Movement(1.0, -1000, -1000);
+            hardware.move(movement);
 
 
             telemetry.update();
