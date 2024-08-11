@@ -25,6 +25,18 @@ public class Hardware {
         arm.setTargetPosition(0);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        frontLeft.setTargetPosition(0);
+        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        frontRight.setTargetPosition(0);
+        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        backLeft.setTargetPosition(0);
+        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        backRight.setTargetPosition(0);
+        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         //flip backleft
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
     }

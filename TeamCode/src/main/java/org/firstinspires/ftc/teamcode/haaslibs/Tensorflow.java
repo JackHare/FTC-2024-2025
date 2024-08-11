@@ -14,6 +14,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //Managse Custom tensorflow model
@@ -112,14 +113,14 @@ public class Tensorflow {
         return gamepiece;
     }
 
-    public AprilTag pollAprilTag() {
+    public ArrayList<AprilTag> pollAprilTag() {
 
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-
-        AprilTag aprilTag = new AprilTag();
+        ArrayList <AprilTag> aprilTags = new ArrayList<>();
         // Step through the list of detections and display info for each one.
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null) {
+                AprilTag aprilTag = new AprilTag();
                 aprilTag.number = detection.id;
                 aprilTag.name = detection.metadata.name;
 
@@ -132,9 +133,10 @@ public class Tensorflow {
                 aprilTag.range = detection.ftcPose.range;
                 aprilTag.bearing = detection.ftcPose.bearing;
                 aprilTag.elevation = detection.ftcPose.elevation;
+                aprilTags.add(aprilTag);
             }
         }   // end for() loop
-        return aprilTag;
+        return aprilTags;
     }
 
 

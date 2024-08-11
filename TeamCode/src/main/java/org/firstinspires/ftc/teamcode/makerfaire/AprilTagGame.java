@@ -19,7 +19,8 @@ public class AprilTagGame extends OpMode {
 
     Tensorflow tensorflow = new Tensorflow();
     AprilTag aprilTag = new AprilTag();
-    AprilTag lastAprilTag = new AprilTag();
+    ArrayList <AprilTag> lastAprilTag = new ArrayList<>();
+    ArrayList <AprilTag> aprilTagResults = new ArrayList<>();
 
     ElapsedTime runTime = new ElapsedTime();
 
@@ -32,6 +33,8 @@ public class AprilTagGame extends OpMode {
     int counter = 0;
 
     ArrayList <AprilTag> aprilTagIds = new ArrayList<>();
+
+
 
     @Override
     public void init()
@@ -51,9 +54,16 @@ public class AprilTagGame extends OpMode {
     @Override
     public void loop() {
         //Poll for april tags
-        aprilTag = tensorflow.pollAprilTag();
-        if (aprilTag.number != 0 && pollingForAprilTags && aprilTag.number != lastAprilTag.number)aprilTagIds.add(aprilTag);
-        lastAprilTag = aprilTag;
+        aprilTagResults = tensorflow.pollAprilTag();
+
+        for(int i = 0; i < aprilTagResults.size();i++)
+        {
+            telemetry.addData("num"+i, aprilTagResults.get(i).number );
+
+            if (pollingForAprilTags && aprilTagResults != lastAprilTag)aprilTagIds.add(aprilTagResults.get(i));
+      //      if (aprilTagResults.get(i).number != 0 && pollingForAprilTags && aprilTagResults.get(0).number != lastAprilTag.get(0).number)aprilTagIds.add(aprilTagResults.get(i));
+        }
+        lastAprilTag = aprilTagResults;
         telemetry.addData("Number", aprilTag.number);
         telemetry.addData("Name", aprilTag.name);
         telemetry.addData("time", (Math.sin(runTime.time())));

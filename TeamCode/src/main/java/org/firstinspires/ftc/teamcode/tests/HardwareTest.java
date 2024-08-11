@@ -50,9 +50,9 @@ public class HardwareTest extends OpMode
 
         //Finally poll and print Gamepiece and April tag information
         Gamepiece gamepiece = tensorflow.pollTensorflow();
-        AprilTag aprilTag = tensorflow.pollAprilTag();
+     //   AprilTag aprilTag = tensorflow.pollAprilTag();
         telemetry.addData("Gamepiece color", gamepiece.color);
-        telemetry.addData("April tag", aprilTag.name);
+       // telemetry.addData("April tag", aprilTag.name);
     }
 
 }
